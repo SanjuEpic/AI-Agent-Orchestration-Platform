@@ -97,6 +97,10 @@ Users can visually design agents, attach specialized tools, configure safety gua
    # Telegram Bot (Primary messaging channel)
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token
    ```
+   *(Alternatively, if you prefer a UI-first setup, you can leave these blank in the `.env` file and configure them directly under the **Settings** tab in the Web UI after booting).*
+
+   ![UI Settings Configuration](docs/frontend_plots/settings-config.png)
+
 3. Run the bootloader script from the project root:
    ```bash
    python run.py
