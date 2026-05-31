@@ -127,10 +127,20 @@ Users can visually design agents, attach specialized tools, configure safety gua
 ---
 
 ## 🧪 Running the Test Suite
-The critical paths (Agent configurations, graph parsing, price calculators, session histories, memory templates, and webhook triages) are guarded by **27 unit tests**. Run them locally with:
+
+The platform's critical execution paths are guarded by **27 comprehensive unit tests**. Run the test suite locally with:
+
 ```bash
 pytest backend/tests
 ```
+
+### Test Coverage Categories
+* **🗄️ Database & SQLModel Persistence**: CRUD operations for agents, visual workflows (nodes/edges layout), conversation history retention, and system settings.
+* **📈 Token Tracking & Cost Calculation**: Verifies cost computations per provider (OpenAI, Gemini), aggregation of session stats, and Chain-of-Thought/reasoning (thought tokens) support.
+* **🛡️ Safety Guardrails & Limits**: Enforces constraints such as maximum tool turn limits, jailbreak/prompt injection detection, and conversation history compaction thresholds.
+* **🛠️ Tool Execution & Sandbox Checks**: Validates AST-safe math calculators, directory-restricted local workspace file sandbox operations, and mock weather geocoding.
+* **🔗 Dynamic Orchestration & StateGraph Routing**: Tests LangGraph dynamic state reducers, conditional edge expression matching, semantic triage nodes, and active run cancellation.
+* **🔌 REST API Endpoint Controllers**: Validates settings endpoints and background APScheduler job synchronization.
 
 ---
 
