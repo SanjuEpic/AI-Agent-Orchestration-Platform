@@ -1,0 +1,37 @@
+# Environments & Keys
+.env
+.env.private
+.env.*
+
+# Python Cache & Tests
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.pytest/
+test_platform_run.db
+
+# SQLite Databases & Shard files
+*.db
+*.db-shm
+*.db-wal
+orchestrator.db
+orchestrator.db-shm
+orchestrator.db-wal
+
+# Frontend Node modules and build output
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Editor / IDE Configs
+.vscode/
+.idea/
+.claude/
+.gemini/
+*.log
+
+# Docs 
+docs/my_reference_docs
+
