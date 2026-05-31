@@ -9,11 +9,12 @@ Users can visually design agents, attach specialized tools, configure safety gua
 ---
 
 ## 📺 Live Demo
-> [!NOTE]
-> *Placeholder for the project Loom screen recording. The demo walkthrough will demonstrate:*
-> 1. Editing and creating agents / workflow templates visually in the workspace.
-> 2. Executing the **AI News Digest** scheduler and monitoring its logs in real-time.
-> 3. Connecting to the Telegram Bot, typing `/agent`, `/reset`, and interacting live.
+
+Watch the following Loom video walkthroughs demonstrating the platform's core functionalities:
+
+1. 💻 **[Overall UI Workspace Tour](https://www.loom.com/share/4ef6a55c7376469fa10d7fac5a6672e8)**: A complete tour of the visual design builder, active agents panel, live event logger, session tracking dashboard, and settings manager.
+2. ⚙️ **[Workflow Creation & Cron Scheduler Testing](https://www.loom.com/share/c39bb35d6ffd4132a8a3d17b4d01267d)**: Demonstrates assembling a new agent graph on the canvas, running it manually, setting up a cron scheduler, and inspecting metric cost traces.
+3. 🔗 **[Complex Workflow Nodes Walkthrough](https://www.loom.com/share/883bb6e98b714c179326e4f667e56363)**: An in-depth walkthrough of a complex workflow execution containing semantic classification/triage nodes, parallel multi-agent tool execution tracks, and final action nodes.
 
 ---
 
