@@ -19,49 +19,49 @@ Users can visually design agents, attach specialized tools, configure safety gua
 
 ## 🏗️ System Architecture
 
-Our platform represents workflow execution as a state machine where agents, conditions, and actions form nodes, and connections form transitions. This is compiled dynamically into a LangGraph runner.
-
-```mermaid
-graph TD
-    %% Clients
-    U1[Visual Web UI - React Flow] <-->|REST API / WebSockets| B1[FastAPI Backend]
-    U2[Telegram Bot User] <-->|Polling / Bot Events| B2[Telegram Bot Gateway]
-
-    %% Backend Components
-    subgraph FastAPI App
-        B1
-        B2
-        S1[Background Scheduler - APScheduler] -->|Trigger Schedule| E1[LangGraph AI Orchestrator]
-    end
-
-    %% Orchestrator Components
-    subgraph LangGraph AI Orchestrator
-        E1 -->|Compile & Run| G1((Graph Runtime))
-        G1 -->|Execute| N1[Agent Nodes]
-        G1 -->|Execute| N2[Triage & Condition Nodes]
-        G1 -->|Execute| N3[Action Nodes]
-        N1 <-->|LLM Queries| L1[LLM Providers: Gemini, OpenAI, Anthropic]
-        N1 <-->|Execute| T1[Tools Registry: Search, Calculator, Weather, Sandbox File IO]
-        N3 -->|Send Message| B2
-    end
-
-    %% Persistence
-    subgraph Data & Persistence
-        B1 <-->|SQLModel ORM| DB[(SQLite Database: orchestrator.db)]
-        E1 <-->|Save State/Logs| DB
-        G1 <-->|LangGraph Checkpointer| M1[Memory Saver]
-    end
-
-    %% Styling
-    classDef client fill:#818cf8,stroke:#4f46e5,stroke-width:2px,color:#fff;
-    classDef backend fill:#34d399,stroke:#059669,stroke-width:2px,color:#fff;
-    classDef graph fill:#fb7185,stroke:#e11d48,stroke-width:2px,color:#fff;
-    classDef data fill:#fbbf24,stroke:#d97706,stroke-width:2px,color:#fff;
-    
-    class U1,U2 client;
-    class B1,B2,S1 backend;
-    class G1,N1,N2,N3 graph;
-    class DB,M1 data;
+```
+                                     +----------------------+
+                                     |      Web Browser     |
+                                     | (React + React Flow  |
+                                     |    + Tailwind CSS)   |
+                                     +-----------+----------+
+                                                 | REST + WebSocket
+                                                 v
+ +-----------------------------------------------------------------+
+ |                       FastAPI Application                       |
+ |                                                                 |
+ |  +-------------+   +--------------+   +-----------------------+ |
+ |  |   Routers   |   |  WebSocket   |   |  Telegram Bot Gateway | |
+ |  |  /api/...   |   | /ws/monitor  |   |    (long polling)     | |
+ |  +------+------+   +------+-------+   +-----------+-----------+ |
+ |         |                 |                       |             |
+ |         v                 v                       v             |
+ |  +-----------------------------------------------------------+  |
+ |  |  Workflow Orchestrator (backend/runtime/executor.py)      |  |
+ |  |    - maps nodes/edges into LangGraph StateGraph           |  |
+ |  |    - handles branching / conditions / triages             |  |
+ |  |    - pipes node outputs -> next node perception memory    |  |
+ |  +-------------------------+---------------------------------+  |
+ |                            v                                    |
+ |  +-----------------------------------------------------------+  |
+ |  |  Agent Runtime (backend/runtime/executor.py & tools.py)    |  |
+ |  |    - LangGraph runner + LLMs (Gemini/OpenAI/Anthropic)    |  |
+ |  |    - Multi-turn sequential tool calling loops             |  |
+ |  |    - Execution cost ($/M tokens) & thought token tracking |  |
+ |  |    - Context rolling windows + rolling history compaction  |  |
+ |  +-------------------------+---------------------------------+  |
+ |                            v                                    |
+ |  +-----------------------------------------------------------+  |
+ |  |  Persistence (SQLModel + SQLite: orchestrator.db)          |  |
+ |  |  tables: agents, workflows, runs, logs, schedules, msgs   |  |
+ |  +-----------------------------------------------------------+  |
+ +-----------------------------------------------------------------+
+                                      ^
+                                      | HTTPS
+                              +-------+--------+
+                              |    Telegram    |
+                              |  (user chat)   |
+                              +----------------+
 ```
 
 ---
