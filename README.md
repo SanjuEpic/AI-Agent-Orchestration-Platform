@@ -146,3 +146,12 @@ Webhooks for Slack and WhatsApp Meta Graph APIs are implemented in [channels.py]
    ```
 2. **Slack Webhook Hook:** Set the **Event Subscriptions Request URL** in the Slack App Portal to `https://<ngrok-url>/api/webhooks/slack` and subscribe to `app_mention` messages.
 3. **WhatsApp Webhook Hook:** Set the **Meta Webhook Callback URL** to `https://<ngrok-url>/api/webhooks/whatsapp` and configure your verification token.
+
+---
+
+## ⚠️ Known Limitations & Production Considerations
+
+1. **Telegram Client-Initiation Restraint**: Bots cannot proactively message a user on Telegram unless the user has first typed `/start` or interacted with the bot. Scheduled cron triggers will fail to deliver messages if the user has not initialized the bot.
+2. **In-Process Scheduler (APScheduler)**: The background scheduler runs directly within the main FastAPI application process. If the server is stopped or restarted, scheduled tasks do not execute. There is no external task broker (like Redis/Celery) to coordinate/retry schedules across multiple server instances.
+3. **No LLM Request Throttling / Queuing**: External LLM client calls are made immediately. In workflows with intensive parallel nodes or tight tool loops, the platform doesn't queue requests or apply automatic exponential backoffs, making it susceptible to API rate limits (`HTTP 429`).
+
