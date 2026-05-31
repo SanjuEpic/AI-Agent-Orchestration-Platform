@@ -123,15 +123,39 @@ pytest backend/tests
 ## 🏗️ Adding Templates or Channels
 
 ### 1. Adding a New Workflow Template
-* **The UI Way:**
-  1. Open the visual canvas workspace under the **Design Workspace** tab.
-  2. Drag your trigger, agent, action, and condition nodes onto the screen.
-  3. Wire the nodes together using the connection nodes.
-  4. Save the workflow, naming it. It will instantly persist as an active template.
-* **The Code Way:**
-  1. Open [seed.py](file:///c:/Users/aksha/OneDrive/Documents/ai-agent-orchestration/backend/db/seed.py).
-  2. Define nodes and edges lists representing the React Flow schema.
-  3. Create a `Workflow` database record inside `seed_database()` and run the app to apply it.
+
+The platform supports adding new workflow designs either visually through the browser workspace or programmatically in the codebase.
+
+#### 🎨 The UI Way (Visual Canvas)
+1. **Navigate**: Go to the **Design Workspace** tab in the Web UI.
+2. **Assemble**: Drag nodes onto the canvas (Triggers, Agents, Actions, and Conditions).
+3. **Connect**: Link node handles together to define flow progression and conditional branching paths.
+4. **Persist**: Click **Save Workflow**, name your design, and it will immediately become available to run or schedule.
+
+#### 💻 The Code Way (Database Seeding)
+1. **Open Seeder**: Open [seed.py](file:///c:/Users/aksha/OneDrive/Documents/ai-agent-orchestration/backend/db/seed.py).
+2. **Define Nodes & Edges**: Set up lists representing the React Flow JSON graph structures:
+   ```python
+   nodes = [
+       {"id": "trigger_1", "type": "trigger", "data": {"type": "telegram"}},
+       {"id": "agent_1", "type": "agent", "data": {"agent_id": 1}}
+   ]
+   edges = [
+       {"id": "e1-edge", "source": "trigger_1", "target": "agent_1"}
+   ]
+   ```
+3. **Save Record**: Insert and commit a new `Workflow` object in the database inside the `seed_database()` function:
+   ```python
+   custom_workflow = Workflow(
+       name="My Programmatic Flow",
+       description="Seeded agent workflow template",
+       nodes=nodes,
+       edges=edges
+   )
+   db.add(custom_workflow)
+   ```
+4. **Boot**: Run `python run.py` to auto-execute the database seeder and register the workflow in the backend database.
+
 
 ### 2. Connecting & Managing Messaging Channels
 
