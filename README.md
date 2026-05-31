@@ -225,6 +225,53 @@ Webhooks for Slack and WhatsApp Meta Graph APIs are implemented in [channels.py]
 
 ---
 
+## 🧠 Memory, Configuration & Telegram Commands
+
+To deliver a production-grade multi-agent experience, the platform incorporates a state-of-the-art dual-tiered memory model, fully customizable agents, and interactive controls via Telegram.
+
+### 1. Memory System Architecture
+
+* **Short-Term Conversation History (Context Memory)**:
+  * Conversation history is stored in the database's `Message` table.
+  * The agent's attention window is bound by its configured `memory_limit` ($K$ turns).
+  * **LLM-Based Session Compaction**: Once a session exceeds $K$ turns or 90% of the model's context window, the orchestrator triggers an automatic summarization step. An LLM compresses the older message history into a single cohesive system summary message, deletes the old messages from the database, and preserves the latest 2 turns intact.
+* **Long-Term Semantic Memory (Fact Extraction)**:
+  * At the end of each workflow run, an asynchronous memory worker (`extract_persistent_workflow_memory`) executes.
+  * It reviews the run logs to distill key semantic facts (user configurations, preferences, facts, or parameter states) and saves them to the `AgentMemory` table.
+  * These persistent facts are injected automatically back into the agent's context during future runs to give personalized continuity across different sessions.
+* **Session Reset (`/reset` Command)**:
+  * Users can type `/reset` directly in the Telegram chat to clear both their short-term message history and long-term extracted facts scoped to their active workflow.
+
+### 2. ⚙️ Agent Configurable Dimensions
+Each agent configured in the visual design workspace contains the following core parameters:
+
+| Dimension | Description |
+| :--- | :--- |
+| **`Name`** | The display identifier of the agent (e.g., `Support Specialist`). |
+| **`Role`** | The functional role defining the agent's persona and focus (e.g., `Technical Support Expert`). |
+| **`System Prompt`** | Main directive and instructions defining the agent's behavior, style, and guardrails. |
+| **`Model Provider`** | Selects the LLM client engine (choices: `Gemini` or `OpenAI`). |
+| **`Model Name`** | Selects the specific model identifier (e.g., `gemini-2.5-flash`, `gpt-4o-mini`, `gpt-4o`). |
+| **`Memory Limit (K)`** | The conversation turn ceiling before LLM session compaction is triggered. |
+| **`Tools`** | Enabled capabilities from the registry (choices: `search`, `weather`, `calculator`, `workspace`). |
+| **`Channels`** | Active communication endpoints (e.g., `telegram`). |
+| **`Guardrails`** | JSON configured rules defining safety checks or output format constraints. |
+
+### 3. 🤖 Telegram Commands Reference
+The Telegram Bot gateway supports the following interactive controls for live users:
+
+| Command | Arguments | Description |
+| :--- | :--- | :--- |
+| **`/start`** | None | Welcomes the user, explains the bot, and displays their unique **Chat ID** (needed to hook cron schedules). |
+| **`/help`** | None | Displays the bot manual and lists all available controls. |
+| **`/agent`** | Optional: `[index]` | Without arguments, lists all active workflows in the platform. With an index (e.g., `/agent 1`), switches your active chat session to route all future queries to that workflow. |
+| **`/reset`** | None | Clears the chat's message history and persistent long-term memories for the currently active workflow. |
+| **`/my_schedules`** | None | Lists all background task triggers registered to deliver updates to this chat ID. |
+| **`/enable_schedule`** | `[schedule_id]` | Enables and triggers a background scheduled job by its database ID. |
+| **`/disable_schedule`**| `[schedule_id]` | Pauses and disables a background scheduled job by its database ID. |
+
+---
+
 ## 🔌 API Endpoints Reference
 
 The backend exposes a clean REST and WebSocket API. The interactive OpenAPI documentation is auto-generated and accessible locally at **`http://localhost:8000/docs`**.
