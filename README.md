@@ -101,15 +101,10 @@ Users can visually design agents, attach specialized tools, configure safety gua
 * Node.js (with `npm`) installed
 
 ### 🤖 How to Obtain a Telegram Bot Token
-
-The primary messaging gateway for interactive agent collaboration requires a Telegram Bot token. If you do not have one, follow these quick steps to get one for free:
-
-1. Open your Telegram app, search for the official **`@BotFather`** account, and start a chat.
-2. Send the `/newbot` command to `@BotFather`.
-3. Enter a friendly display name for your bot (e.g., `My Agent Orchestrator`).
-4. Enter a unique username for your bot ending in `bot` (e.g., `my_agent_platform_bot`).
-5. `@BotFather` will reply with a message containing your HTTP API token (e.g., `123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ`). Copy this token.
-6. Paste the token into your `.env` file as `TELEGRAM_BOT_TOKEN`, or save it directly in the UI under the **Settings** tab after launching the application.
+1. **Search**: Find **`@BotFather`** on Telegram (official account with blue verification checkmark) and send `/start`.
+2. **Create**: Send `/newbot`, then type a display **Name** and a unique **Username** ending in `bot` (e.g., `my_orchestrator_bot`).
+3. **Copy**: Copy the HTTP API token sent to you (e.g., `123456789:ABCdef...`).
+4. **Configure**: Save it in `.env` as `TELEGRAM_BOT_TOKEN=...` or paste it directly in the UI **Settings** tab.
 
 ### Setup & Run
 1. Clone this repository and open the project workspace.
