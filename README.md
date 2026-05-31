@@ -66,6 +66,20 @@ Users can visually design agents, attach specialized tools, configure safety gua
 
 ---
 
+## 🛠️ Tech Stack & Justifications
+
+| Decision | Choice | Why |
+| :--- | :--- | :--- |
+| **Language (Backend)** | **Python 3.10+** | Rich AI/LLM ecosystem. Native compatibility with LangGraph, SQLModel, and asynchronous packages like `python-telegram-bot`. |
+| **Agent Framework** | **LangGraph** | Enables stateful multi-agent workflows, loops, and conditional branching as a native directed acyclic graph (DAG), which aligns perfectly with the hiring challenge's visual builder specs. |
+| **LLM Providers** | **Gemini, OpenAI, Anthropic** | Support for premium model suites. Configurable dynamically per-agent in the workspace so users can utilize the best model for each task (e.g. Gemini for search tools, GPT-4o for complex triage). |
+| **Web Framework** | **FastAPI** | Async-first performance, perfect for streaming token logs/cost tracking via WebSockets and handling background scheduler operations simultaneously. |
+| **Persistence** | **SQLModel + SQLite** | Local file-based SQLite database (`orchestrator.db`) ensures zero-config local runs. Enabling Write-Ahead Logging (WAL) handles high concurrent read/write transactions smoothly. |
+| **Frontend** | **React (Vite) + React Flow** | React Flow provides a premium, responsive drag-and-drop workspace for designing agent graph topologies. Compiled static assets are served directly from the FastAPI backend. |
+| **Messaging Channel** | **Telegram (python-telegram-bot)** | Fully integrated messaging bot. Provides instant multi-turn agent chats without business verifications (WhatsApp) or workspace setups (Slack). |
+
+---
+
 ## 🗂️ Clean Separation of Layers
 
 | Layer | Responsibility | Files & Directories |
