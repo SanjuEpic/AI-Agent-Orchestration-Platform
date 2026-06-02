@@ -24,7 +24,7 @@ Watch the following Loom video walkthroughs demonstrating the platform's core fu
                                      +----------------------+
                                      |      Web Browser     |
                                      | (React + React Flow  |
-                                     |    + Tailwind CSS)   |
+                                     |     + Vanilla CSS)   |
                                      +-----------+----------+
                                                  | REST + WebSocket
                                                  v
